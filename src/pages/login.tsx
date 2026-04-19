@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -25,6 +26,7 @@ import { loginSchema, type LoginFormValues } from "@/lib/validations/auth-schema
 const SUBMIT_DELAY_MS = 900;
 
 export function LoginPage() {
+  const { login } = useAuth();
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -35,7 +37,7 @@ export function LoginPage() {
 
   async function onSubmit(values: LoginFormValues) {
     await new Promise((resolve) => setTimeout(resolve, SUBMIT_DELAY_MS));
-    console.log("[TeamSync] Login payload:", values);
+    login({ email: values.email });
   }
 
   return (
