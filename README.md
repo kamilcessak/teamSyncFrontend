@@ -1,73 +1,35 @@
-# React + TypeScript + Vite
+# TeamSync — frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+SPA do zarządzania pracą zespołu: dashboard, kalendarz, projekty i zadania. Warstwa danych jest obecnie **symulowana** (mocki); typy i warstwa `api/` są przygotowane pod podłączenie prawdziwego backendu.
 
-Currently, two official plugins are available:
+**Stack:** React 19, TypeScript, Vite 6, Tailwind CSS 4, React Router 7, TanStack Query, react-hook-form + Zod, komponenty w stylu shadcn (preset base-nova).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Szczegółowy opis struktury katalogów i architektury: [`documentation.md`](./documentation.md).
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Wymagania
 
-## Expanding the ESLint configuration
+- [Node.js](https://nodejs.org/) (LTS zalecany)
+- npm (dostarczany z Node)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Uruchomienie (lokalnie)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Aplikacja działa pod adresem podanym w terminalu (domyślnie **http://localhost:5173**).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Inne skrypty
+
+| Polecenie | Opis |
+|-----------|------|
+| `npm run build` | Kompilacja TypeScript + build produkcyjny (katalog `dist/`) |
+| `npm run preview` | Podgląd zbudowanej wersji |
+| `npm run lint` | ESLint |
