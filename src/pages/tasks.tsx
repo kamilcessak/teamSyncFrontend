@@ -1,11 +1,11 @@
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTasks } from "@/hooks/use-tasks";
+import { userFullName, userInitials } from "@/lib/user";
 
 const statusLabel = {
   todo: "To Do",
   in_progress: "In Progress",
-  review: "Review",
   done: "Done",
 } as const;
 
@@ -19,7 +19,7 @@ const priorityVariant = {
 export function TasksPage() {
   const { data: tasks, isLoading } = useTasks();
 
-  const columns = ["todo", "in_progress", "review", "done"] as const;
+  const columns = ["todo", "in_progress", "done"] as const;
 
   return (
     <div className="space-y-6">
@@ -31,7 +31,7 @@ export function TasksPage() {
       {isLoading ? (
         <p className="text-muted-foreground">Loading tasks...</p>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {columns.map((status) => {
             const columnTasks = tasks?.filter((t) => t.status === status) ?? [];
             return (
@@ -58,22 +58,13 @@ export function TasksPage() {
                           })}
                         </p>
                       )}
-                      {task.assignee && (
-                        <div className="mt-3 flex items-center gap-2">
-                          <Avatar className="h-5 w-5">
-                            <AvatarImage src={task.assignee.avatar} alt={task.assignee.name} />
-                            <AvatarFallback className="text-[8px]">
-                              {task.assignee.name
-                                .split(" ")
-                                .map((n) => n[0])
-                                .join("")}
-                            </AvatarFallback>
-                          </Avatar>
-                          <span className="text-xs text-muted-foreground">
-                            {task.assignee.name}
-                          </span>
-                        </div>
-                      )}
+                      <div className="mt-3 flex items-center gap-2">
+                        <Avatar className="h-5 w-5">
+                          <AvatarImage src={task.assignee.avatar} alt={userFullName(task.assignee)} />
+                          <AvatarFallback className="text-[8px]">{userInitials(task.assignee)}</AvatarFallback>
+                        </Avatar>
+                        <span className="text-xs text-muted-foreground">{userFullName(task.assignee)}</span>
+                      </div>
                     </div>
                   ))}
                 </div>

@@ -1,17 +1,21 @@
 import { CalendarDays, FolderKanban, CheckSquare, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { useProjects } from "@/hooks/use-projects";
-import { useTasks } from "@/hooks/use-tasks";
-import { useEvents } from "@/hooks/use-events";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useDashboardStats } from "@/hooks/use-dashboard-stats";
+import { useRecentTasks } from "@/hooks/use-recent-tasks";
+import { useUpcomingEvents } from "@/hooks/use-upcoming-events";
+import { userFullName } from "@/lib/user";
 
 function StatCard({
   label,
   value,
   icon: Icon,
+  isLoading,
 }: {
   label: string;
   value: string | number;
   icon: React.ComponentType<{ className?: string }>;
+  isLoading?: boolean;
 }) {
   return (
     <div className="rounded-xl border bg-card p-6 shadow-sm">
@@ -19,17 +23,51 @@ function StatCard({
         <p className="text-sm font-medium text-muted-foreground">{label}</p>
         <Icon className="h-4 w-4 text-muted-foreground" />
       </div>
-      <p className="mt-2 text-3xl font-bold tracking-tight">{value}</p>
+      {isLoading ? (
+        <Skeleton className="mt-2 h-9 w-16" />
+      ) : (
+        <p className="mt-2 text-3xl font-bold tracking-tight">{value}</p>
+      )}
+    </div>
+  );
+}
+
+function RecentTasksSkeleton() {
+  return (
+    <div className="space-y-3">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div key={i} className="flex items-center justify-between rounded-lg border p-3">
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-48" />
+            <Skeleton className="h-3 w-32" />
+          </div>
+          <Skeleton className="h-5 w-14 rounded-full" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function EventsSkeleton() {
+  return (
+    <div className="space-y-3">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div key={i} className="flex items-center justify-between rounded-lg border p-3">
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-40" />
+            <Skeleton className="h-3 w-28" />
+          </div>
+          <Skeleton className="h-5 w-16 rounded-full" />
+        </div>
+      ))}
     </div>
   );
 }
 
 export function DashboardPage() {
-  const { data: projects } = useProjects();
-  const { data: tasks } = useTasks();
-  const { data: events } = useEvents();
-
-  const activeTasks = tasks?.filter((t) => t.status !== "done") ?? [];
+  const { data: stats, isLoading: statsLoading } = useDashboardStats();
+  const { data: recentTasks, isLoading: tasksLoading } = useRecentTasks();
+  const { data: upcomingEvents, isLoading: eventsLoading } = useUpcomingEvents();
 
   return (
     <div className="space-y-8">
@@ -39,60 +77,86 @@ export function DashboardPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Projects" value={projects?.length ?? 0} icon={FolderKanban} />
-        <StatCard label="Active Tasks" value={activeTasks.length} icon={CheckSquare} />
-        <StatCard label="Upcoming Events" value={events?.length ?? 0} icon={CalendarDays} />
-        <StatCard label="Team Members" value={3} icon={Users} />
+        <StatCard
+          label="Projects"
+          value={stats?.projectCount ?? 0}
+          icon={FolderKanban}
+          isLoading={statsLoading}
+        />
+        <StatCard
+          label="Active Tasks"
+          value={stats?.activeTaskCount ?? 0}
+          icon={CheckSquare}
+          isLoading={statsLoading}
+        />
+        <StatCard
+          label="Upcoming Events"
+          value={stats?.upcomingEventCount ?? 0}
+          icon={CalendarDays}
+          isLoading={statsLoading}
+        />
+        <StatCard
+          label="Team Members"
+          value={stats?.teamMemberCount ?? 0}
+          icon={Users}
+          isLoading={statsLoading}
+        />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="rounded-xl border bg-card p-6">
           <h2 className="mb-4 text-lg font-semibold">Recent Tasks</h2>
-          <div className="space-y-3">
-            {activeTasks.slice(0, 5).map((task) => (
-              <div key={task.id} className="flex items-center justify-between rounded-lg border p-3">
-                <div>
-                  <p className="text-sm font-medium">{task.title}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {task.assignee?.name ?? "Unassigned"}
-                  </p>
+          {tasksLoading ? (
+            <RecentTasksSkeleton />
+          ) : (
+            <div className="space-y-3">
+              {recentTasks?.map((task) => (
+                <div key={task.id} className="flex items-center justify-between rounded-lg border p-3">
+                  <div>
+                    <p className="text-sm font-medium">{task.title}</p>
+                    <p className="text-xs text-muted-foreground">{userFullName(task.assignee)}</p>
+                  </div>
+                  <Badge
+                    variant={
+                      task.priority === "urgent"
+                        ? "destructive"
+                        : task.priority === "high"
+                          ? "default"
+                          : "secondary"
+                    }
+                  >
+                    {task.priority}
+                  </Badge>
                 </div>
-                <Badge
-                  variant={
-                    task.priority === "urgent"
-                      ? "destructive"
-                      : task.priority === "high"
-                        ? "default"
-                        : "secondary"
-                  }
-                >
-                  {task.priority}
-                </Badge>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="rounded-xl border bg-card p-6">
           <h2 className="mb-4 text-lg font-semibold">Upcoming Events</h2>
-          <div className="space-y-3">
-            {events?.slice(0, 5).map((event) => (
-              <div key={event.id} className="flex items-center justify-between rounded-lg border p-3">
-                <div>
-                  <p className="text-sm font-medium">{event.title}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {new Date(event.start).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </p>
+          {eventsLoading ? (
+            <EventsSkeleton />
+          ) : (
+            <div className="space-y-3">
+              {upcomingEvents?.slice(0, 5).map((event) => (
+                <div key={event.id} className="flex items-center justify-between rounded-lg border p-3">
+                  <div>
+                    <p className="text-sm font-medium">{event.title}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {new Date(event.start).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                  </div>
+                  <Badge variant="outline">{event.type}</Badge>
                 </div>
-                <Badge variant="outline">{event.type}</Badge>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

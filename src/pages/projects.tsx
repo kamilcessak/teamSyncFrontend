@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useProjects } from "@/hooks/use-projects";
+import { userFullName, userInitials } from "@/lib/user";
 
 const statusColor = {
   active: "default",
@@ -32,22 +33,29 @@ export function ProjectsPage() {
               <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
                 {project.description}
               </p>
+              <div className="mt-3">
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span>Progress</span>
+                  <span>{project.progressPercent}%</span>
+                </div>
+                <div className="mt-1 h-2 overflow-hidden rounded-full bg-muted">
+                  <div
+                    className="h-full rounded-full bg-primary transition-all"
+                    style={{ width: `${project.progressPercent}%` }}
+                  />
+                </div>
+              </div>
               <div className="mt-4 flex items-center justify-between">
                 <div className="flex -space-x-2">
                   {project.members.map((member) => (
                     <Tooltip key={member.id}>
                       <TooltipTrigger>
                         <Avatar className="h-7 w-7 border-2 border-background">
-                          <AvatarImage src={member.avatar} alt={member.name} />
-                          <AvatarFallback className="text-xs">
-                            {member.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")}
-                          </AvatarFallback>
+                          <AvatarImage src={member.avatar} alt={userFullName(member)} />
+                          <AvatarFallback className="text-xs">{userInitials(member)}</AvatarFallback>
                         </Avatar>
                       </TooltipTrigger>
-                      <TooltipContent>{member.name}</TooltipContent>
+                      <TooltipContent>{userFullName(member)}</TooltipContent>
                     </Tooltip>
                   ))}
                 </div>
