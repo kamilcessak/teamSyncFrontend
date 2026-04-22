@@ -4,6 +4,7 @@ import { useTasks } from "@/hooks/use-tasks";
 import { userFullName, userInitials } from "@/lib/user";
 import { EmptyState } from "@/components/ui/emptyState";
 import { ClipboardList } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const statusLabel = {
   todo: "To Do",
@@ -23,7 +24,7 @@ export function TasksPage() {
 
   const columns = ["todo", "in_progress", "done"] as const;
 
-  const isTaskListEmpty = tasks?.length === 0
+  const isTaskListEmpty = tasks?.length === 0;
 
   return (
     <div className="space-y-6">
@@ -33,7 +34,29 @@ export function TasksPage() {
       </div>
 
       {isLoading ? (
-        <p className="text-muted-foreground">Loading tasks...</p>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3].map((columnId) => (
+            <div key={columnId} className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Skeleton className="h-5 w-24" />
+                <Skeleton className="h-5 w-5 rounded-full" />
+              </div>
+              <div className="space-y-2">
+                {[1, 2].map((cardId) => (
+                  <div key={cardId} className="rounded-lg border bg-card p-4 space-y-3">
+                    <Skeleton className="h-4 w-3/4" />
+                    <Skeleton className="h-3 w-1/2" />
+                    <div className="flex items-center gap-2 mt-4">
+                      <Skeleton className="h-5 w-5 rounded-full" />
+                      <Skeleton className="h-3 w-20" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+        
       ) : isTaskListEmpty ? (
         <EmptyState 
           title="Brak zadań"

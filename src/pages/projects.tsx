@@ -5,6 +5,7 @@ import { useProjects } from "@/hooks/use-projects";
 import { userFullName, userInitials } from "@/lib/user";
 import { EmptyState } from "@/components/ui/emptyState";
 import { FolderOpen } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const statusColor = {
   active: "default",
@@ -25,7 +26,26 @@ export function ProjectsPage() {
       </div>
 
       {isLoading ? (
-        <p className="text-muted-foreground">Loading projects...</p>
+        
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3, 4, 5, 6].map((cardId) => (
+            <div key={cardId} className="border bg-card p-6 rounded-xl space-y-4">
+              <Skeleton className="h-6 w-1/2" />
+              <div>
+                <Skeleton className="h-4 w-full mb-2" />
+                <Skeleton className="h-4 w-3/4" />
+              </div>
+              <div className="flex items-center gap-4 mt-6">
+                <div className="flex -space-x-2 shrink-0">
+                  <Skeleton className="h-6 w-6 rounded-full border-2 border-background" />
+                  <Skeleton className="h-6 w-6 rounded-full border-2 border-background" />
+                </div>
+                  <Skeleton className="h-2 flex-1" />
+                </div>
+            </div>
+          ))}
+        </div>
+
         ) : isProjectsListEmpty ? (
         <EmptyState 
           title="Brak projektów"
