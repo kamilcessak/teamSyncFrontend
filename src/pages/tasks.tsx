@@ -2,6 +2,8 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTasks } from "@/hooks/use-tasks";
 import { userFullName, userInitials } from "@/lib/user";
+import { EmptyState } from "@/components/ui/emptyState";
+import { ClipboardList } from "lucide-react";
 
 const statusLabel = {
   todo: "To Do",
@@ -21,6 +23,8 @@ export function TasksPage() {
 
   const columns = ["todo", "in_progress", "done"] as const;
 
+  const isTaskListEmpty = tasks?.length === 0
+
   return (
     <div className="space-y-6">
       <div>
@@ -30,6 +34,12 @@ export function TasksPage() {
 
       {isLoading ? (
         <p className="text-muted-foreground">Loading tasks...</p>
+      ) : isTaskListEmpty ? (
+        <EmptyState 
+          title="Brak zadań"
+          description="Nie masz obecnie żadnych przypisanych zadań"
+          icon={ClipboardList}
+        />
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {columns.map((status) => {

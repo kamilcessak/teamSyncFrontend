@@ -3,6 +3,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useProjects } from "@/hooks/use-projects";
 import { userFullName, userInitials } from "@/lib/user";
+import { EmptyState } from "@/components/ui/emptyState";
+import { FolderOpen } from "lucide-react";
 
 const statusColor = {
   active: "default",
@@ -13,6 +15,8 @@ const statusColor = {
 export function ProjectsPage() {
   const { data: projects, isLoading } = useProjects();
 
+  const isProjectsListEmpty = projects?.length === 0
+
   return (
     <div className="space-y-6">
       <div>
@@ -22,6 +26,12 @@ export function ProjectsPage() {
 
       {isLoading ? (
         <p className="text-muted-foreground">Loading projects...</p>
+        ) : isProjectsListEmpty ? (
+        <EmptyState 
+          title="Brak projektów"
+          description="Nie utworzono żadnych projektów."
+          icon={FolderOpen}
+        />
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {projects?.map((project) => (
