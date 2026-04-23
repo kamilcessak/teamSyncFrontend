@@ -1,6 +1,7 @@
 import { CalendarDays } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useEvents } from "@/hooks/use-events";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function CalendarPage() {
   const { data: events, isLoading } = useEvents();
@@ -16,9 +17,31 @@ export function CalendarPage() {
 
       <div className="rounded-xl border bg-card p-8">
         {isLoading ? (
-          <div className="flex h-96 items-center justify-center text-muted-foreground">
-            Loading events...
+
+          <div className="space-y-6">
+            <Skeleton className="h-64 w-full rounded-lg" />
+            <div>
+              <Skeleton className="h-6 w-32 mb-3" />
+              <div className="space-y-2">
+                {[1, 2, 3].map((eventId) => (
+                  <div key={eventId} className="flex items-center justify-between rounded-lg border p-4">
+                    <div className="flex items-center gap-3">
+                      <Skeleton className="h-2 w-2 rounded-full shrink-0" />
+                      <div className="space-y-2">
+                        <Skeleton className="h-4 w-40" />
+                        <Skeleton className="h-3 w-32"/>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Skeleton className="h-3 w-16" />
+                      <Skeleton className="h-5 w-16 rounded-full" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
+
         ) : (
           <div className="space-y-6">
             <div className="flex h-64 items-center justify-center rounded-lg border-2 border-dashed">
