@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/ui/emptyState";
 import { FolderOpen } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorState } from "@/components/ui/errorState";
+import { CreateProjectDialog } from "@/components/projects/create-project";
 
 const statusColor = {
   active: "default",
@@ -24,6 +25,8 @@ export function ProjectsPage() {
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Projects</h1>
         <p className="text-muted-foreground">Manage and track your team projects</p>
+
+        <CreateProjectDialog />
       </div>
 
       {isLoading ? (

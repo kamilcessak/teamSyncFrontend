@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/ui/emptyState";
 import { ClipboardList } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorState } from "@/components/ui/errorState";
+import { CreateTaskDialog } from "@/components/tasks/create-task";
 
 const statusLabel = {
   todo: "To Do",
@@ -33,6 +34,8 @@ export function TasksPage() {
         <h1 className="text-3xl font-bold tracking-tight">Tasks</h1>
         <p className="text-muted-foreground">Track and organize your work</p>
       </div>
+
+      <CreateTaskDialog />
 
       {isLoading ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
