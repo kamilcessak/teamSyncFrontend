@@ -6,6 +6,7 @@ import { userFullName, userInitials } from "@/lib/user";
 import { EmptyState } from "@/components/ui/emptyState";
 import { FolderOpen } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ErrorState } from "@/components/ui/errorState";
 
 const statusColor = {
   active: "default",
@@ -14,7 +15,7 @@ const statusColor = {
 } as const;
 
 export function ProjectsPage() {
-  const { data: projects, isLoading } = useProjects();
+  const { data: projects, isLoading, isError, refetch } = useProjects();
 
   const isProjectsListEmpty = projects?.length === 0
 
@@ -45,6 +46,9 @@ export function ProjectsPage() {
             </div>
           ))}
         </div>
+
+        ) : isError ? (
+        <ErrorState retryAction={refetch} />
 
         ) : isProjectsListEmpty ? (
         <EmptyState 

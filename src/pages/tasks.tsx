@@ -5,6 +5,7 @@ import { userFullName, userInitials } from "@/lib/user";
 import { EmptyState } from "@/components/ui/emptyState";
 import { ClipboardList } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ErrorState } from "@/components/ui/errorState";
 
 const statusLabel = {
   todo: "To Do",
@@ -20,7 +21,7 @@ const priorityVariant = {
 } as const;
 
 export function TasksPage() {
-  const { data: tasks, isLoading } = useTasks();
+  const { data: tasks, isLoading, isError, refetch } = useTasks();
 
   const columns = ["todo", "in_progress", "done"] as const;
 
@@ -57,6 +58,9 @@ export function TasksPage() {
           ))}
         </div>
         
+      ) : isError ? (
+        <ErrorState retryAction={refetch} />
+
       ) : isTaskListEmpty ? (
         <EmptyState 
           title="Brak zadań"
