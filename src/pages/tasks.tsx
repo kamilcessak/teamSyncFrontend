@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTasks } from "@/hooks/use-tasks";
 import { userFullName, userInitials } from "@/lib/user";
+import { formatDateTimeShort } from "@/lib/date";
 
 const statusLabel = {
   todo: "To Do",
@@ -52,10 +53,7 @@ export function TasksPage() {
                       {task.dueDate && (
                         <p className="mt-2 text-xs text-muted-foreground">
                           Due{" "}
-                          {new Date(task.dueDate).toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                          })}
+                          {formatDateTimeShort(task.dueDate)}
                         </p>
                       )}
                       <div className="mt-3 flex items-center gap-2">

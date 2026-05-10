@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useProjects } from "@/hooks/use-projects";
 import { userFullName, userInitials } from "@/lib/user";
+import { formatDateTimeShort } from "@/lib/date";
 
 const statusColor = {
   active: "default",
@@ -60,11 +61,7 @@ export function ProjectsPage() {
                   ))}
                 </div>
                 <span className="text-xs text-muted-foreground">
-                  {new Date(project.createdAt).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
+                  {formatDateTimeShort(project.createdAt)}
                 </span>
               </div>
             </div>

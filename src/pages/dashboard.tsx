@@ -5,6 +5,7 @@ import { useDashboardStats } from "@/hooks/use-dashboard-stats";
 import { useRecentTasks } from "@/hooks/use-recent-tasks";
 import { useUpcomingEvents } from "@/hooks/use-upcoming-events";
 import { userFullName } from "@/lib/user";
+import { formatDateTimeShort } from "@/lib/date";
 
 function StatCard({
   label,
@@ -144,12 +145,7 @@ export function DashboardPage() {
                   <div>
                     <p className="text-sm font-medium">{event.title}</p>
                     <p className="text-xs text-muted-foreground">
-                      {new Date(event.start).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      {formatDateTimeShort(event.start)}
                     </p>
                   </div>
                   <Badge variant="outline">{event.type}</Badge>
