@@ -31,11 +31,11 @@ W tej chwili aplikacja działa na mockach i w `localStorage`. Pierwszym zadaniem
 
 ---
 
-## Strumień 2: Domena kalendarza i złożony stan — *Priorytet 2*
+## ~~Strumień 2: Domena kalendarza i złożony stan — *Priorytet 2*~~
 
 Kalendarz to centralny element aplikacji i najbardziej ryzykowny obszar pod kątem konfliktów edycji i stref czasowych.
 
-### Task 2.1: Interaktywny kalendarz (front-end core)
+### ~~Task 2.1: Interaktywny kalendarz (front-end core)~~
 
 **Cel:** Wydajny widok siatki kalendarza obsługujący dużą ilość danych.
 
@@ -45,7 +45,7 @@ Kalendarz to centralny element aplikacji i najbardziej ryzykowny obszar pod kąt
 - Implementacja drag & drop do zmiany terminów zadań.
 - Optimistic UI w TanStack Query — natychmiastowa aktualizacja UI przy przesunięciu zadania, żądanie w tle, rollback przy błędzie.
 
-### Task 2.2: Standaryzacja stref czasowych (timezones)
+### ~~Task 2.2: Standaryzacja stref czasowych (timezones)~~
 
 **Cel:** Zabezpieczenie przed błędami wynikającymi z różnych stref czasowych użytkowników.
 
